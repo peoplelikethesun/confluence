@@ -20,7 +20,7 @@ ENV CONFLUENCE_HOME=/var/confluence \
 ENV JAVA_OPTS="-javaagent:${AGENT_PATH}/${AGENT_FILENAME} ${JAVA_OPTS}"
 
 RUN mkdir -p ${CONFLUENCE_INSTALL} ${CONFLUENCE_HOME} ${AGENT_PATH} ${CONFLUENCE_INSTALL}${LIB_PATH} \
-&& curl -o ${AGENT_PATH}/${AGENT_FILENAME}  https://github.com/haxqer/confluence/releases/download/v${AGENT_VERSION}/atlassian-agent.jar -L \
+&& curl -o ${AGENT_PATH}/${AGENT_FILENAME}  https://github.com/peoplelikethesun/confluence/releases/download/v${AGENT_VERSION}/atlassian-agent.jar -L \
 && curl -o /tmp/atlassian.tar.gz https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-${APP_NAME}-${APP_VERSION}.tar.gz -L \
 && tar xzf /tmp/atlassian.tar.gz -C /opt/confluence/ --strip-components 1 \
 && rm -f /tmp/atlassian.tar.gz \

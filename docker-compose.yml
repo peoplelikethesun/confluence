@@ -1,12 +1,12 @@
 version: '3.4'
 services:
   confluence:
-    image: atlassian/confluence:9.2.1
+    image: confluence:9.2.1
     container_name: confluence-srv
     environment:
       - TZ=Asia/Shanghai
-      - JVM_MINIMUM_MEMORY=2g
-      - JVM_MAXIMUM_MEMORY=2g
+      - JVM_MINIMUM_MEMORY=4g
+      - JVM_MAXIMUM_MEMORY=4g
       - JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=256m -XX:ReservedCodeCacheSize=512m'
     depends_on:
       - mysql
@@ -20,13 +20,13 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-confluence
+    container_name: confluence-mysql
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_DATABASE=confluence
-      - MYSQL_ROOT_PASSWORD=V17WJ38YKBePajXT
+      - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_USER=confluence
-      - MYSQL_PASSWORD=s1IJ6kpUtDFYOWK7
+      - MYSQL_PASSWORD=123456
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin', '--transaction-isolation=READ-COMMITTED', '--innodb_log_file_size=256M', '--max_allowed_packet=256M','--log_bin_trust_function_creators=1']
     volumes:
       - ./mysql/data:/var/lib/mysql

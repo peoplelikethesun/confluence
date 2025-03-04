@@ -66,12 +66,12 @@ docker volume create confluence_home_data && docker network create confluence-ne
 
 ```
 docker exec confluence-srv java -jar /var/agent/atlassian-agent.jar \
-    -d \
+    -d \ #数据中心许可证,否则可去掉
     -p conf \
     -m Hello@world.com \
     -n Hello@world.com \
-    -o your-org \
-    -s you-server-id-xxxx
+    -o your-org \ #组织id，随便一个比如hello.org
+    -s you-server-id-xxxx #confluence启动后访问获取服务器ID
 ```
 
 ## How to hack confluence plugin
