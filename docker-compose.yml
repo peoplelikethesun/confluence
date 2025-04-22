@@ -7,7 +7,7 @@ services:
       - TZ=Asia/Shanghai
       - JVM_MINIMUM_MEMORY=4g
       - JVM_MAXIMUM_MEMORY=4g
-      - JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=256m -XX:ReservedCodeCacheSize=512m'
+      - JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=128m -XX:ReservedCodeCacheSize=256m'
     depends_on:
       - mysql
     ports:
@@ -24,9 +24,9 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_DATABASE=confluence
-      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=rj5tgLP3EG6Qnuv
       - MYSQL_USER=confluence
-      - MYSQL_PASSWORD=123456
+      - MYSQL_PASSWORD=rj5tgLP3EG6Qnuv
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin', '--transaction-isolation=READ-COMMITTED', '--innodb_log_file_size=256M', '--max_allowed_packet=256M','--log_bin_trust_function_creators=1']
     volumes:
       - ./mysql/data:/var/lib/mysql
@@ -37,3 +37,29 @@ services:
 networks:
   network-bridge:
     driver: bridge
+
+#################################docker单个容器部署#####################################
+docker run -d \
+   -p 8090:8090 \
+   -e TZ=Asia/Shanghai \
+   -v /usr/local/confluence/data:/var/confluence --name confluence-srv \
+   confluence:9.2.1
+
+docker run -d \
+  --name confluence-mysql \
+  -p 3306:3306 \
+  -e TZ=Asia/Shanghai \
+  -e MYSQL_DATABASE=confluence \
+  -e MYSQL_ROOT_PASSWORD=rj5tgLP3EG6Qnuv \
+  -e MYSQL_USER=confluence \
+  -e MYSQL_PASSWORD=rj5tgLP3EG6Qnuv \
+  -v /volume1/mysql/data:/var/lib/mysql \
+  --restart always \
+  mysql:8.0 \
+  mysqld \
+  --character-set-server=utf8mb4 \
+  --collation-server=utf8mb4_bin \
+  --transaction-isolation=READ-COMMITTED \
+  --innodb_log_file_size=256M \
+  --max_allowed_packet=256M \
+  --log_bin_trust_function_creators=1
