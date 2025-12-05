@@ -66,7 +66,7 @@ docker volume create confluence_home_data && docker network create confluence-ne
 
 ```
 docker exec confluence-srv java -jar /var/agent/atlassian-agent.jar \
-    -d \ #数据中心许可证,否则可去掉
+    -d \ 
     -p conf \
     -m Hello@world.com \
     -n Hello@world.com \

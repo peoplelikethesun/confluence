@@ -1,25 +1,26 @@
-version: '3.4'
+#备注：部署后数据库初始化较慢需要等待30分钟时间，有报错但是不影响
+version: '3.8'
 services:
   confluence:
     image: confluence:9.2.1
     container_name: confluence-srv
     environment:
       - TZ=Asia/Shanghai
-      - JVM_MINIMUM_MEMORY=4g
-      - JVM_MAXIMUM_MEMORY=4g
-      - JVM_CODE_CACHE_ARGS='-XX:InitialCodeCacheSize=128m -XX:ReservedCodeCacheSize=256m'
+     #如果想调整jvm参数请使用下面一行，程序运行起来后虽然参数重复，但根据jvm规则优先使用靠后的重复参数
+     #- CATALINA_OPTS=-Xms2g -Xmx2g -XX:InitialCodeCacheSize=256m -XX:ReservedCodeCacheSize=512m
+      - CATALINA_OPTS=-XX:InitialCodeCacheSize=256m
     depends_on:
       - mysql
     ports:
       - "8090:8090"
     volumes:
-      - ./data:/var/confluence
+      - /usr/local/confluence/data:/var/confluence
     restart: always
     networks:
       - network-bridge
 
   mysql:
-    image: mysql:8.0
+    image: mysql:8.4.0
     container_name: confluence-mysql
     environment:
       - TZ=Asia/Shanghai
@@ -29,7 +30,7 @@ services:
       - MYSQL_PASSWORD=rj5tgLP3EG6Qnuv
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin', '--transaction-isolation=READ-COMMITTED', '--innodb_log_file_size=256M', '--max_allowed_packet=256M','--log_bin_trust_function_creators=1']
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - /usr/local/confluence/mysql/data:/var/lib/mysql
     restart: always
     networks:
       - network-bridge
@@ -38,12 +39,15 @@ networks:
   network-bridge:
     driver: bridge
 
+    
+
 #################################docker单个容器部署#####################################
 docker run -d \
    -p 8090:8090 \
    -e TZ=Asia/Shanghai \
    -v /usr/local/confluence/data:/var/confluence --name confluence-srv \
    confluence:9.2.1
+
 
 docker run -d \
   --name confluence-mysql \
